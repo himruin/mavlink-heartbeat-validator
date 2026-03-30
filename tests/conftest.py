@@ -1,4 +1,6 @@
 import pytest
+from pymavlink import mavutil
+from io import BytesIO
 
 # Enum values from docs/heartbeat.md
 AUTOPILOT_TYPES = {
@@ -17,7 +19,7 @@ SYSTEM_STATUS_TYPES = {
     "CRITICAL": 5,
 }
 
-# default heartbeat parameters
+
 def heartbeat_msg(type=1, autopilot=AUTOPILOT_TYPES["ARDUPILOT"], base_mode=209, custom_mode=0, system_status=SYSTEM_STATUS_TYPES["ACTIVE"]):
     """factory for creating heartbeat message dicts with overrideable defaults"""
     return {
@@ -32,26 +34,13 @@ def heartbeat_msg(type=1, autopilot=AUTOPILOT_TYPES["ARDUPILOT"], base_mode=209,
 @pytest.fixture
 def mavlink_connection():
     """in-memory MAVLink encoder/decoder"""
-    from pymavlink import mavutil
-    from io import BytesIO
-
-    encoder = mavutil.mavlink.MAVLink(BytesIO())
-    return encoder
+    return mavutil.mavlink.MAVLink(BytesIO())
 
 
 @pytest.fixture
 def fault_injector():
-    """inject faults into MAVLink frame by corrupting specific byte positions"""
+    """inject a fault into a MAVLink frame by corrupting a specific byte via XOR"""
     def _inject(raw_bytes, position, flip_mask=0xFF):
-        """
-        corrupt a byte at given position via XOR.
-        input:
-            raw_bytes: Original frame bytes
-            position: Byte position (0=prefix, -1=last CRC byte, -2=first CRC byte)
-            flip_mask: XOR mask to apply (default 0xFF flips all bits)
-        output:
-            corrupted frame as bytes
-        """
         corrupted = bytearray(raw_bytes)
         corrupted[position] ^= flip_mask
         return bytes(corrupted)
