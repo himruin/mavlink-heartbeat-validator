@@ -34,4 +34,4 @@ def test_multiple_heartbeats_sequence(mavlink_connection):
 
     raw_bytes = mavlink_connection.file.getvalue()
     messages = mavlink_connection.parse_buffer(raw_bytes)
-    assert len(messages) >= 3  # All 3 frames parsed
+    assert len(messages) == len(AUTOPILOT_TYPES)

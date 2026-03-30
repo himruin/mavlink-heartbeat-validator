@@ -2,12 +2,11 @@
 
 Sample project to practice MAVLink protocol testing using pytest framework. MAVLink is structurally similar to automotive serialized protocols — fixed header, typed fields, CRC.
 
-## Project Assumption
-
 A pytest suite that validates MAVLink HEARTBEAT message parsing using pymavlink's dialect system — pure in-process protocol logic, no hardware, no network.
-Links:
-- https://mavlink.io/en/mavgen_python/
-- https://mavlink.io/en/messages/common.html#HEARTBEAT
+
+References:
+- [pymavlink Python API](https://mavlink.io/en/mavgen_python/)
+- [HEARTBEAT message spec](https://mavlink.io/en/messages/common.html#HEARTBEAT)
 
 ## Setup
 
@@ -34,7 +33,7 @@ pytest -v
 - [x] **Positive tests:** Valid heartbeat parse + parametrized autopilot enum values + multiple heartbeats sequentially
 - [x] **Negative tests:** Prefix corruption + CRC corruption
 
-## Future Enhancements Ideas
+## Future Enhancements
 
 - [ ] Wrong message ID handling
 - [ ] Truncated frame detection
@@ -42,5 +41,5 @@ pytest -v
 
 ## Project Goals
 
-- Testing of drones domain acknowledgment: MAVLink protocol specifics (enums, checksums, frame structure)
+- Demonstrates MAVLink domain knowledge: protocol enums, frame structure, CRC validation
 - Clean, focused test organization using pytest
