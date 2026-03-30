@@ -5,6 +5,9 @@ Sample project to practice MAVLink protocol testing using pytest framework. MAVL
 ## Project Assumption
 
 A pytest suite that validates MAVLink HEARTBEAT message parsing using pymavlink's dialect system — pure in-process protocol logic, no hardware, no network.
+Links:
+- https://mavlink.io/en/mavgen_python/
+- https://mavlink.io/en/messages/common.html#HEARTBEAT
 
 ## Setup
 
@@ -25,15 +28,19 @@ pytest -v
 - Generate raw MAVLink HEARTBEAT frames in-process using pymavlink dialect system
 - Parse back and assert on decoded fields (type, autopilot, system_status)
 - No network, no hardware — pure protocol logic
-- 3 focused test cases: valid parse, magic byte failure, parametrized autopilot enums
 
-## TODO
+## Test Coverage
 
-- [ ] Heartbeat tests: valid parse, magic byte failure, parametrized autopilot enums
-- [ ] Malformed frame tests: truncated, wrong message ID, corrupted payload
+- [x] **Positive tests:** Valid heartbeat parse + parametrized autopilot enum values + multiple heartbeats sequentially
+- [x] **Negative tests:** Prefix corruption + CRC corruption
+
+## Future Enhancements Ideas
+
+- [ ] Wrong message ID handling
+- [ ] Truncated frame detection
+- [ ] Payload integrity validation
 
 ## Project Goals
 
-- Demonstrate pytest fixture design with pymavlink
-- Show domain awareness: MAVLink protocol specifics (enums, checksums, frame structure)
-- Clean, focused test organization
+- Testing of drones domain acknowledgment: MAVLink protocol specifics (enums, checksums, frame structure)
+- Clean, focused test organization using pytest
