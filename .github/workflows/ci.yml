@@ -1,0 +1,44 @@
+name: MAVLink Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }} # defines what counts as "the same work"
+  cancel-in-progress: true # when a new run starts for the same group, kill the old one immediately
+
+# workflow token security
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4 # git tag poining to specific release of that action, @v4 / @v5 is the standard convention for CI workflows
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip" # tells GitHub Actions to save the downloaded packages after the first run
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tests
+        run: pytest tests/ -v --tb=short --junitxml=results.xml
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-results
+          path: results.xml
+          retention-days: 7
