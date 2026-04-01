@@ -20,14 +20,20 @@ SYSTEM_STATUS_TYPES = {
 }
 
 
-def heartbeat_msg(type=1, autopilot=AUTOPILOT_TYPES["ARDUPILOT"], base_mode=209, custom_mode=0, system_status=SYSTEM_STATUS_TYPES["ACTIVE"]):
+def heartbeat_msg(
+    type=1,
+    autopilot=AUTOPILOT_TYPES["ARDUPILOT"],
+    base_mode=209,
+    custom_mode=0,
+    system_status=SYSTEM_STATUS_TYPES["ACTIVE"],
+):
     """factory for creating heartbeat message dicts with overrideable defaults"""
     return {
         "type": type,
         "autopilot": autopilot,
         "base_mode": base_mode,
         "custom_mode": custom_mode,
-        "system_status": system_status
+        "system_status": system_status,
     }
 
 
@@ -40,8 +46,10 @@ def mavlink_connection():
 @pytest.fixture
 def fault_injector():
     """inject a fault into a MAVLink frame by corrupting a specific byte via XOR"""
+
     def _inject(raw_bytes, position, flip_mask=0xFF):
         corrupted = bytearray(raw_bytes)
         corrupted[position] ^= flip_mask
         return bytes(corrupted)
+
     return _inject
