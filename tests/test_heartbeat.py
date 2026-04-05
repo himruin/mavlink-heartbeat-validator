@@ -1,7 +1,7 @@
 """positive testing of parsing MAVLink heartbeat message frames"""
 
 import pytest
-from conftest import heartbeat_msg, AUTOPILOT_TYPES
+from mavlink_test_utils import heartbeat_msg, AUTOPILOT_TYPES
 
 
 def test_parse_valid_heartbeat(mavlink_connection):
