@@ -3,7 +3,7 @@
 import pytest
 from pymavlink import mavutil
 from io import BytesIO
-from conftest import heartbeat_msg
+from mavlink_test_utils import heartbeat_msg
 
 
 def test_heartbeat_prefix_corrupted(mavlink_connection, fault_injector):
