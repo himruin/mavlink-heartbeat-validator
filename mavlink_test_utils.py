@@ -1,3 +1,5 @@
+OPENSKY_URL = "https://opensky-network.org/api/states/all"
+
 # Enum values from docs/heartbeat.md
 AUTOPILOT_TYPES = {
     "GENERIC": 0,
