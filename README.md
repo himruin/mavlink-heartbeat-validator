@@ -53,6 +53,12 @@ pytest -m "not integration" -v
 - [x] Payload corruption — corrupted data bytes (pos 6–13) trigger CRC failure
 - [x] CRC corruption — corrupted checksum bytes (pos −2, −1) raise CRC error
 
+**`tests_extended/test_opensky_api.py` — OpenSky Network API (mocked)**
+- [x] HTTP 200 status code
+- [x] Response schema — `time` and `states` keys present
+- [x] State vector length — ≥ 18 fields per state vector
+- [x] `on_ground` → MAVLink `system_status` mapping — parametrized across both states (STANDBY / ACTIVE)
+
 ## Project Goals
 
 - Demonstrates MAVLink domain knowledge: protocol enums, frame structure, CRC validation
