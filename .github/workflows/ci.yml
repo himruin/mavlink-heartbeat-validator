@@ -10,6 +10,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }} # defines what counts as "the same work"
   cancel-in-progress: true # when a new run starts for the same group, kill the old one immediately
 
+# opt into Node.js 24 for all actions (Node.js 20 deprecated, forced June 2026)
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 # workflow token security
 permissions:
   contents: read
@@ -33,12 +37,13 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run flake8
-        run: flake8 tests/ tests_extended/
+        run: flake8 . --exclude=.venv
 
       - name: Run black
-        run: black --check tests/ tests_extended/
+        run: black --check . --exclude='.venv'
 
   test:
+    needs: lint
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
