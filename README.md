@@ -59,6 +59,22 @@ pytest -m "not integration" -v
 - [x] State vector length — ≥ 18 fields per state vector
 - [x] `on_ground` → MAVLink `system_status` mapping — parametrized across both states (STANDBY / ACTIVE)
 
+## Docker
+
+```bash
+# Build
+docker build -t mavlink-validator .
+
+# Run all tests
+docker run --rm mavlink-validator
+
+# Run MAVLink protocol tests only
+docker run --rm mavlink-validator pytest tests/ -v --tb=short
+
+# Run OpenSky API tests only
+docker run --rm mavlink-validator pytest tests_extended/ -v --tb=short
+```
+
 ## Project Goals
 
 - Demonstrates MAVLink domain knowledge: protocol enums, frame structure, CRC validation
