@@ -30,14 +30,17 @@ pytest -v
 
 ## Test Coverage
 
-- [x] **Positive tests:** Valid heartbeat parse + parametrized autopilot enum values + multiple heartbeats sequentially
-- [x] **Negative tests:** Prefix corruption + CRC corruption
+**`tests/test_heartbeat.py` — positive tests**
+- [x] Valid heartbeat parse — all fields asserted
+- [x] Parametrized autopilot enum values (GENERIC, PX4, ARDUPILOT, OPENPILOT)
+- [x] Multiple heartbeats parsed sequentially from a single buffer
 
-## Future Enhancements
-
-- [ ] Wrong message ID handling
-- [ ] Truncated frame detection
-- [ ] Payload integrity validation
+**`tests/test_heartbeat_malformed.py` — negative tests (ordered by frame position)**
+- [x] Truncated frame — incomplete bytes return `None` before parsing starts
+- [x] Prefix corruption — invalid start byte (pos 0) raises parse error
+- [x] Wrong message ID — corrupted ID byte (pos 5) parsed as `MAVLink_unknown`, not `HEARTBEAT`
+- [x] Payload corruption — corrupted data bytes (pos 6–13) trigger CRC failure
+- [x] CRC corruption — corrupted checksum bytes (pos −2, −1) raise CRC error
 
 ## Project Goals
 

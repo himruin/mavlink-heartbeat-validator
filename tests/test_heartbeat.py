@@ -1,6 +1,8 @@
 """positive testing of parsing MAVLink heartbeat message frames"""
 
 import pytest
+from pymavlink import mavutil
+from io import BytesIO
 from mavlink_test_utils import heartbeat_msg, AUTOPILOT_TYPES
 
 
@@ -9,7 +11,9 @@ def test_parse_valid_heartbeat(mavlink_connection):
     msg = heartbeat_msg()
     mavlink_connection.heartbeat_send(**msg)
     raw_bytes = mavlink_connection.file.getvalue()
-    messages = mavlink_connection.parse_buffer(raw_bytes)
+
+    decoder = mavutil.mavlink.MAVLink(BytesIO())
+    messages = decoder.parse_buffer(raw_bytes)
     assert messages[0].type == msg["type"]
     assert messages[0].autopilot == msg["autopilot"]
     assert messages[0].base_mode == msg["base_mode"]
@@ -23,7 +27,9 @@ def test_autopilot_enum(mavlink_connection, autopilot):
     msg = heartbeat_msg(autopilot=autopilot)
     mavlink_connection.heartbeat_send(**msg)
     raw_bytes = mavlink_connection.file.getvalue()
-    messages = mavlink_connection.parse_buffer(raw_bytes)
+
+    decoder = mavutil.mavlink.MAVLink(BytesIO())
+    messages = decoder.parse_buffer(raw_bytes)
     assert messages[0].autopilot == autopilot
 
 
@@ -34,5 +40,7 @@ def test_multiple_heartbeats_sequence(mavlink_connection):
         mavlink_connection.heartbeat_send(**msg)
 
     raw_bytes = mavlink_connection.file.getvalue()
-    messages = mavlink_connection.parse_buffer(raw_bytes)
+
+    decoder = mavutil.mavlink.MAVLink(BytesIO())
+    messages = decoder.parse_buffer(raw_bytes)
     assert len(messages) == len(AUTOPILOT_TYPES)
