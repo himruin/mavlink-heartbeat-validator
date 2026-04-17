@@ -46,3 +46,15 @@ def mock_opensky(drone_factory):
     with responses.RequestsMock() as rsps:
         rsps.add(responses.GET, OPENSKY_URL, json=payload, status=200)
         yield drone  # tests receive the drone dict to assert against
+
+
+@pytest.fixture(params=[True, False], ids=["on_ground", "airborne"])
+def mock_opensky_state(drone_factory, request):
+    drone = drone_factory(on_ground=request.param)
+    payload = {
+        "time": 1617896720,
+        "states": [_make_state_vector(drone)],
+    }
+    with responses.RequestsMock() as rsps:
+        rsps.add(responses.GET, OPENSKY_URL, json=payload, status=200)
+        yield drone

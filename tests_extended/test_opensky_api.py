@@ -19,10 +19,10 @@ def test_response_schema(mock_opensky, http_session):
 def test_state_vector_length(mock_opensky, http_session):
     resp = http_session.get(OPENSKY_URL)
     state_vector = resp.json()["states"][0]
-    assert len(state_vector) >= 17
+    assert len(state_vector) >= 18
 
 
-def test_on_ground_maps_to_system_status(mock_opensky, http_session):
+def test_on_ground_maps_to_system_status(mock_opensky_state, http_session):
     resp = http_session.get(OPENSKY_URL)
     state_vector = resp.json()["states"][0]
     on_ground = state_vector[8]
